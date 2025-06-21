@@ -34,7 +34,7 @@ class HomeController extends Controller
         // Filter dengan album yang dipilih
         if ($albumQuery) {
             $fotos->whereHas('album', function ($query) use ($albumQuery) {
-                $query->where('NamaAlbum', $albumQuery);
+                $query->whereRaw('LOWER(NamaAlbum) = ?', [strtolower($albumQuery)]);
             });
         }
 
@@ -42,7 +42,16 @@ class HomeController extends Controller
         $fotos = $fotos->paginate(12);
 
         // Ambil list album
-        $albumNames = Album::pluck('NamaAlbum')->toArray();
+        $albumNames = Album::all()
+            ->groupBy(function ($item) {
+                return strtolower($item->NamaAlbum);
+            })
+            ->map(function ($group) {
+                return $group->first()->NamaAlbum;
+            })
+            ->values()
+            ->sort()
+            ->toArray();
 
         return view('home.index', compact('fotos', 'searchQuery', 'albumNames'));
     }

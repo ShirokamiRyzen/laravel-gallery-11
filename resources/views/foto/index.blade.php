@@ -59,7 +59,7 @@
                                         <td>{{ $foto->user->NamaLengkap }}</td>
                                         <td>{{ $foto->created_at }}</td>
                                         <td>
-                                            <div class="d-flex flex-wrap gap-2">
+                                            <div class="d-flex flex-nowrap gap-2 overflow-auto">
                                                 <a href="{{ route('foto.edit', $foto->id) }}" class="btn btn-primary btn-sm">
                                                     <i class="fa-solid fa-pen-to-square"></i>
                                                 </a>

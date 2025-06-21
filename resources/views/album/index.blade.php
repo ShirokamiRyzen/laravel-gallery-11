@@ -41,7 +41,7 @@
                                         <td>{{ $album->user->NamaLengkap }}</td>
                                         <td>{{ $album->created_at }}</td>
                                         <td>
-                                            <div class="d-flex flex-wrap gap-2">
+                                            <div class="d-flex flex-nowrap gap-2 overflow-auto">
                                                 <a href="{{ route('album.show', $album->id) }}" class="btn btn-success btn-sm">
                                                     <i class="fa-solid fa-eye"></i>
                                                 </a>
