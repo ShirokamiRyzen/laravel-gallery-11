@@ -2,6 +2,40 @@
 @section('title', 'Detail Foto')
 
 @section('content')
+    <style>
+        .comment-bubble {
+            position: relative;
+            background-color: #f8f9fa;
+            border-radius: 12px;
+            padding: 10px 15px;
+            margin-left: 12px;
+            max-width: 100%;
+            display: inline-block;
+            color: #212529;
+        }
+
+        .comment-bubble::before {
+            content: '';
+            position: absolute;
+            top: 12px;
+            left: -8px;
+            width: 0;
+            height: 0;
+            border-top: 8px solid transparent;
+            border-bottom: 8px solid transparent;
+            border-right: 8px solid #f8f9fa;
+        }
+
+        /* FIXED DARK MODE */
+        [data-bs-theme="dark"] .comment-bubble {
+            background-color: #343a40 !important;
+            color: #f8f9fa !important;
+        }
+
+        [data-bs-theme="dark"] .comment-bubble::before {
+            border-right-color: #343a40 !important;
+        }
+    </style>
     <div class="container py-5">
         <div class="row justify-content-center">
             <div class="col-md-8">
@@ -10,34 +44,37 @@
                         <img src="{{ Storage::url($foto->LokasiFile) }}" class="img-fluid" alt="{{ $foto->JudulFoto }}"
                             loading="lazy">
                         <h2 class="mt-4">{{ $foto->JudulFoto }}</h2>
-                        <p class="mb-4">{{ $foto->DeskripsiFoto }}</p>
+                        <p class="mb-2">{{ $foto->DeskripsiFoto }}</p>
                         <p>Uploaded by: {{ $foto->user->Username }}</p>
+                        <p class="text-muted">Uploaded on: {{ $foto->created_at->format('d M Y H:i') }}</p>
+
                         <div class="row">
                             <div class="col">
-                                <a href="{{ Storage::url($foto->LokasiFile) }}" class="btn btn-primary" download><i
-                                        class="fa-solid fa-download"></i> Download</a>
+                                <a href="{{ Storage::url($foto->LokasiFile) }}" class="btn btn-primary" download>
+                                    <i class="fa-solid fa-download"></i> Download
+                                </a>
                             </div>
                             <div class="col text-end">
                                 @guest
-                                    {{--<button class="btn btn-primary" disabled><i class="fa-regular fa-heart"></i></button>--}}
-                                    <span class="text-muted"></span>
                                 @else
                                     @if ($foto->isLikedByUser(auth()->id()))
                                         <form action="{{ route('foto.unlike', $foto->id) }}" method="post">
                                             @csrf
                                             @method('DELETE')
-                                            <button class="btn btn-danger like-btn" data-foto-id="{{ $foto->id }}"><i
-                                                    class="fa-solid fa-heart"></i></button>
+                                            <button class="btn btn-danger like-btn" data-foto-id="{{ $foto->id }}">
+                                                <i class="fa-solid fa-heart"></i>
+                                            </button>
                                         </form>
                                     @else
                                         <form action="{{ route('foto.like', $foto->id) }}" method="post">
                                             @csrf
-                                            <button class="btn btn-primary like-btn" data-foto-id="{{ $foto->id }}"><i
-                                                    class="fa-regular fa-heart"></i></button>
+                                            <button class="btn btn-primary like-btn" data-foto-id="{{ $foto->id }}">
+                                                <i class="fa-regular fa-heart"></i>
+                                            </button>
                                         </form>
                                     @endif
                                 @endguest
-                                <p id="total-likes"><i class="fa-solid fa-heart"></i> {{ $foto->total_likes }}&nbsp;</p>
+                                <p id="total-likes"><i class="fa-solid fa-heart"></i> {{ $foto->total_likes }}</p>
                             </div>
                         </div>
                     </div>
@@ -46,45 +83,43 @@
         </div>
 
         <!-- Comment Section -->
-        <div class="row justify-content-center mt-3">
+        <div class="row justify-content-center mt-4">
             <div class="col-md-8">
-                <h3>Comment</h3>
-                <!-- List Komentar -->
+                <h3>Comments</h3>
                 <div id="comment-list">
                     @if ($foto->komentar && count($foto->komentar) > 0)
                         <ul class="list-unstyled">
                             @foreach ($foto->komentar as $index => $komentar)
-                                <div class="comment-container" style="{{ $index >= 10 ? 'display: none;' : '' }}">
-                                    @if ($komentar->user)
-                                        <div class="d-flex align-items-center">
-                                            @if ($komentar->user->profile_picture)
-                                                <img src="{{ asset('storage/user_profile/' . $komentar->user->profile_picture) }}"
-                                                    alt="Profile Picture" class="rounded-circle me-2" style="width: 40px;">
-                                            @else
-                                                <img src="{{ asset('assets/default-avatar.jpg') }}" alt="Profile Picture"
-                                                    class="rounded-circle me-2" style="width: 40px;">
-                                            @endif
-                                            <div>
-                                                <strong>{{ $komentar->user->NamaLengkap }}</strong>
-                                                <p>{{ $komentar->IsiKomentar }}</p>
-                                            </div>
+                                <div class="d-flex align-items-start mb-3">
+                                    <div class="flex-shrink-0">
+                                        @if ($komentar->user && $komentar->user->profile_picture)
+                                            <img src="{{ asset('storage/user_profile/' . $komentar->user->profile_picture) }}"
+                                                alt="Profile Picture" class="rounded-circle" style="width: 45px; height: 45px;">
+                                        @else
+                                            <img src="{{ asset('assets/default-avatar.jpg') }}" alt="Profile Picture"
+                                                class="rounded-circle" style="width: 45px; height: 45px;">
+                                        @endif
+                                    </div>
+
+                                    <div class="flex-grow-1 ms-2 position-relative">
+                                        <div class="comment-bubble">
+                                            <strong>{{ $komentar->user->NamaLengkap }}</strong><br>
+                                            {{ $komentar->IsiKomentar }}<br>
+                                            <small class="text-muted">{{ $komentar->created_at->format('d M Y H:i') }}</small>
                                         </div>
-                                        @auth
-                                            @if ($komentar->id_user == auth()->id())
-                                                <div>
-                                                    <form action="{{ route('foto.deleteComment', $komentar->id) }}"
-                                                        method="post">
-                                                        @csrf
-                                                        @method('DELETE')
-                                                        <button type="submit" class="btn btn-danger btn-sm"><i
-                                                                class="fa-solid fa-trash"></i></button>
-                                                    </form>
-                                                </div>
-                                            @endif
-                                        @endauth
-                                    @else
-                                        <p>{{ $komentar->IsiKomentar }}</p>
-                                    @endif
+                                    </div>
+
+                                    @auth
+                                        @if ($komentar->id_user == auth()->id())
+                                            <form action="{{ route('foto.deleteComment', $komentar->id) }}" method="post" class="ms-2">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="submit" class="btn btn-danger btn-sm">
+                                                    <i class="fa-solid fa-trash"></i>
+                                                </button>
+                                            </form>
+                                        @endif
+                                    @endauth
                                 </div>
                             @endforeach
                         </ul>
@@ -94,108 +129,37 @@
                             </div>
                         @endif
                     @else
-                        <p>Empty comment</p>
+                        <p>No comments yet.</p>
                     @endif
                 </div>
 
-                <!-- Form Komentar -->
                 @auth
                     <form id="comment-form" action="{{ route('foto.komentar', $foto->id) }}" method="post">
                         @csrf
                         <div class="form-group">
-                            <textarea id="comment-text" name="IsiKomentar" class="form-control" rows="3" placeholder="Add a comment..."></textarea>
+                            <textarea id="comment-text" name="IsiKomentar" class="form-control" rows="3"
+                                placeholder="Add a comment..."></textarea>
                         </div>
                         <button type="submit" class="btn btn-primary mt-2">Send</button>
                     </form>
                 @else
-                    <p><a href="/login">Login to comment</a></p>
+                    <p><a href="{{ route('login') }}">Login to comment</a></p>
                 @endauth
             </div>
         </div>
     </div>
+
     <script>
-        $(document).ready(function() {
-            // Menggunakan event delegasi untuk memastikan bahwa tombol "Load More Comments" juga berfungsi untuk elemen baru yang ditambahkan dinamis
-            $(document).on('click', '.load-more-btn', function() {
+        $(document).ready(function () {
+            $('.load-more-btn').click(function () {
                 $('.comment-container:hidden').slice(0, 10).show();
                 if ($('.comment-container:hidden').length == 0) {
                     $('.load-more-btn').hide();
                 }
             });
-
-            // Hanya jalankan jika pengguna telah login
-            @auth
-            $('.like-btn').click(function(e) {
-                e.preventDefault();
-                var fotoId = $(this).data('foto-id');
-                var likeBtn = $(this);
-                var isUnlike = likeBtn.hasClass('btn-danger'); // Check if it's an unlike action
-
-                $.ajax({
-                    type: isUnlike ? 'DELETE' :
-                    'POST', // Change request type based on unlike action
-                    url: isUnlike ? "/public/photo/" + fotoId + "/unlike" : "/public/photo/" +
-                        fotoId + "/like",
-                    data: {
-                        _token: "{{ csrf_token() }}"
-                    },
-                    success: function(response) {
-                        var totalLikes = response.total_likes;
-                        $('#total-likes').html('<i class="fa-solid fa-heart"></i> ' +
-                            totalLikes + '&nbsp;');
-
-                        // Toggle button text and class for unlike action
-                        if (isUnlike) {
-                            likeBtn.removeClass('btn-danger').addClass('btn-primary').html(
-                                '<i class="fa-regular fa-heart"></i>');
-                        } else {
-                            likeBtn.removeClass('btn-primary').addClass('btn-danger').html(
-                                '<i class="fa-solid fa-heart"></i>');
-                        }
-                    },
-                    error: function(xhr, status, error) {
-                        console.error(xhr.responseText);
-                    }
-                });
-            });
-
-            $('#comment-form').submit(function(e) {
-                e.preventDefault();
-                var formData = $(this).serialize();
-                $.ajax({
-                    type: 'POST',
-                    url: $(this).attr('action'),
-                    data: formData,
-                    success: function(response) {
-                        $('#comment-text').val('');
-                        var comment = `
-                            <div class="comment-container">
-                                <div class="d-flex align-items-center">
-                                    <img src="{{ asset('storage/user_profile/' . auth()->user()->profile_picture) }}" alt="Profile Picture" class="rounded-circle me-2" style="width: 40px;">
-                                    <div>
-                                        <strong>{{ auth()->user()->NamaLengkap }}</strong>
-                                        <p>${response.comment.IsiKomentar}</p>
-                                    </div>
-                                </div>
-                                <div>
-                                    <form action="{{ route('foto.deleteComment', '') }}/${response.comment.id}" method="post">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="submit" class="btn btn-danger btn-sm"><i class="fa-solid fa-trash"></i></button>
-                                    </form>
-                                </div>
-                            </div>
-                            `;
-                        $('#comment-list').append(comment);
-                    },
-                    error: function(xhr, status, error) {
-                        console.error(xhr.responseText);
-                    }
-                });
-            });
-        @endauth
         });
     </script>
+
     <script>
         @if (session('success'))
             Swal.fire({

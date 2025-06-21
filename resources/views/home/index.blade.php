@@ -32,7 +32,7 @@
         <div class="position-absolute text-white d-flex flex-column align-items-center justify-content-center"
             style="top: 0; right: 0; bottom: 0; left: 0; background-color: rgba(0, 0, 0, 0.5);">
             <span>Gallery App</span>
-            <h1 class="mb-4 mt-2 font-weight-bold text-center">Made with Laravel Framework</h1>
+            <h1 class="mb-4 font-weight-bold text-center">Made with Laravel Framework</h1>
             <div class="text-center">
                 @if (auth()->check())
                     <a href="{{ route('album.create') }}" class="btn btn-sm px-3 py-2 text-white mt-3 mt-sm-0 mx-1"
