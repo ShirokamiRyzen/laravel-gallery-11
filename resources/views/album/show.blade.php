@@ -15,20 +15,30 @@
                             @forelse($fotos as $foto)
                                 <div class="col-md-4 mb-3">
                                     <div class="card">
-                                        <img src="{{ Storage::url($foto->LokasiFile) }}" class="card-img-top" alt="{{ $foto->JudulFoto }}" loading="lazy">
+                                        <div class="ratio ratio-16x9">
+                                            <img src="{{ Storage::url($foto->LokasiFile) }}"
+                                                class="w-100 h-100 object-fit-cover"
+                                                alt="{{ $foto->JudulFoto }}" loading="lazy">
+                                        </div>
                                         <div class="card-body">
                                             <h5 class="card-title">{{ Str::limit($foto->JudulFoto, 40) }}</h5>
                                             <p class="card-text">{{ Str::limit($foto->DeskripsiFoto, 40) }}</p>
                                         </div>
                                         <div class="card-footer d-flex align-items-center">
-                                            <a href="{{ route('home.show', $foto->id) }}" class="btn btn-primary me-2"><i class="fa-solid fa-eye"></i></a>
-                                            <a href="{{ route('foto.edit', $foto->id) }}" class="btn btn-primary me-2"><i class="fa-solid fa-pen-to-square"></i></a>
+                                            <a href="{{ route('home.show', $foto->id) }}" class="btn btn-primary me-2">
+                                                <i class="fa-solid fa-eye"></i>
+                                            </a>
+                                            <a href="{{ route('foto.edit', $foto->id) }}" class="btn btn-primary me-2">
+                                                <i class="fa-solid fa-pen-to-square"></i>
+                                            </a>
                                             <form id="delete-form-{{ $foto->id }}"
                                                   action="{{ route('foto.destroy', $foto->id) }}" method="POST">
                                                 @csrf
                                                 @method('DELETE')
                                                 <button type="button" class="btn btn-danger delete-btn me-2"
-                                                        data-foto-id="{{ $foto->id }}"><i class="fa-solid fa-trash"></i></button>
+                                                        data-foto-id="{{ $foto->id }}">
+                                                    <i class="fa-solid fa-trash"></i>
+                                                </button>
                                             </form>
                                         </div>
                                     </div>
@@ -40,6 +50,7 @@
                                 </div>
                             @endforelse
                         </div>
+
                         <div class="card-footer">
                             <nav aria-label="Page navigation">
                                 <ul class="pagination justify-content-center">
@@ -49,19 +60,24 @@
                                         </li>
                                     @else
                                         <li class="page-item">
-                                            <a class="page-link" href="{{ $fotos->appends(request()->input())->previousPageUrl() }}" aria-label="Previous">&laquo;</a>
+                                            <a class="page-link"
+                                               href="{{ $fotos->appends(request()->input())->previousPageUrl() }}"
+                                               aria-label="Previous">&laquo;</a>
                                         </li>
                                     @endif
-                                    
+
                                     @for ($i = 1; $i <= $fotos->lastPage(); $i++)
                                         <li class="page-item {{ $fotos->currentPage() == $i ? 'active' : '' }}">
-                                            <a class="page-link" href="{{ $fotos->appends(request()->input())->url($i) }}">{{ $i }}</a>
+                                            <a class="page-link"
+                                               href="{{ $fotos->appends(request()->input())->url($i) }}">{{ $i }}</a>
                                         </li>
                                     @endfor
-                                    
+
                                     @if ($fotos->hasMorePages())
                                         <li class="page-item">
-                                            <a class="page-link" href="{{ $fotos->appends(request()->input())->nextPageUrl() }}" aria-label="Next">&raquo;</a>
+                                            <a class="page-link"
+                                               href="{{ $fotos->appends(request()->input())->nextPageUrl() }}"
+                                               aria-label="Next">&raquo;</a>
                                         </li>
                                     @else
                                         <li class="page-item disabled">
@@ -76,12 +92,13 @@
             </div>
         </div>
     </div>
+
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', function () {
             const deleteButtons = document.querySelectorAll('.delete-btn');
 
             deleteButtons.forEach(button => {
-                button.addEventListener('click', function() {
+                button.addEventListener('click', function () {
                     const fotoId = this.getAttribute('data-foto-id');
 
                     Swal.fire({
@@ -102,20 +119,20 @@
             });
         });
     </script>
-    <script>
-    @if (session('success'))
-        Swal.fire({
-            icon: 'success',
-            title: 'Success',
-            text: '{{ session('success') }}',
-        });
-    @elseif (session('error'))
-        Swal.fire({
-            icon: 'error',
-            title: 'Error',
-            text: '{{ session('error') }}',
-        });
-    @endif
-</script>
 
+    <script>
+        @if (session('success'))
+            Swal.fire({
+                icon: 'success',
+                title: 'Success',
+                text: '{{ session('success') }}',
+            });
+        @elseif (session('error'))
+            Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: '{{ session('error') }}',
+            });
+        @endif
+    </script>
 @endsection

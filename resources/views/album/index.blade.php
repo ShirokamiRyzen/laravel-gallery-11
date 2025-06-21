@@ -3,9 +3,9 @@
 
 @section('content')
     <br>
-    <div class="container">
+    <div class="container-fluid">
         <div class="row">
-            <div class="col-md-12">
+            <div class="col-12">
                 <div class="card">
                     <div class="card-header">
                         <div class="row">
@@ -13,13 +13,15 @@
                                 Albums Data
                             </div>
                             <div class="col text-end">
-                                <a href="{{ route('album.create') }}" class="btn btn-primary"><i class="fa-solid fa-plus"></i> Add Album</a>
+                                <a href="{{ route('album.create') }}" class="btn btn-primary">
+                                    <i class="fa-solid fa-plus"></i> Add Album
+                                </a>
                             </div>
                         </div>
                     </div>
-                    <div class="card-body">
-                        <table class="table">
-                            <thead>
+                    <div class="card-body table-responsive">
+                        <table class="table table-bordered table-hover align-middle text-nowrap">
+                            <thead class="table-dark">
                                 <tr>
                                     <th>No</th>
                                     <th>Album Name</th>
@@ -38,17 +40,21 @@
                                         <td>{{ $album->user->NamaLengkap }}</td>
                                         <td>{{ $album->created_at }}</td>
                                         <td>
-                                            <div class="d-flex">
-                                                <a href="{{ route('album.show', $album->id) }}"
-                                                    class="btn btn-success me-2"><i class="fa-solid fa-eye"></i></a>
-                                                <a href="{{ route('album.edit', $album->id) }}"
-                                                    class="btn btn-primary me-2"><i class="fa-solid fa-pen-to-square"></i></a>
+                                            <div class="d-flex flex-nowrap gap-2 overflow-auto">
+                                                <a href="{{ route('album.show', $album->id) }}" class="btn btn-success btn-sm">
+                                                    <i class="fa-solid fa-eye"></i>
+                                                </a>
+                                                <a href="{{ route('album.edit', $album->id) }}" class="btn btn-primary btn-sm">
+                                                    <i class="fa-solid fa-pen-to-square"></i>
+                                                </a>
                                                 <form id="delete-album-{{ $album->id }}"
                                                     action="{{ route('album.destroy', $album->id) }}" method="POST">
                                                     @csrf
                                                     @method('DELETE')
                                                     <button type="button" onclick="deleteAlbum({{ $album->id }})"
-                                                        class="btn btn-danger me-2"><i class="fa-solid fa-trash"></i></button>
+                                                        class="btn btn-danger btn-sm">
+                                                        <i class="fa-solid fa-trash"></i>
+                                                    </button>
                                                 </form>
                                             </div>
                                         </td>
@@ -63,23 +69,24 @@
                     </div>
                     <div class="card-footer">
                         <nav aria-label="Page navigation">
-                            <ul class="pagination justify-content-center">
+                            <ul class="pagination justify-content-center flex-wrap">
                                 @if ($albums->onFirstPage())
                                     <li class="page-item disabled">
                                         <span class="page-link">&laquo;</span>
                                     </li>
                                 @else
                                     <li class="page-item">
-                                        <a class="page-link" href="{{ $albums->previousPageUrl() }}" aria-label="Previous">&laquo;</a>
+                                        <a class="page-link" href="{{ $albums->previousPageUrl() }}"
+                                            aria-label="Previous">&laquo;</a>
                                     </li>
                                 @endif
-                                
+
                                 @for ($i = 1; $i <= $albums->lastPage(); $i++)
                                     <li class="page-item {{ $i === $albums->currentPage() ? 'active' : '' }}">
                                         <a class="page-link" href="{{ $albums->url($i) }}">{{ $i }}</a>
                                     </li>
                                 @endfor
-                                
+
                                 @if ($albums->hasMorePages())
                                     <li class="page-item">
                                         <a class="page-link" href="{{ $albums->nextPageUrl() }}" aria-label="Next">&raquo;</a>
@@ -91,12 +98,13 @@
                                 @endif
                             </ul>
                         </nav>
-                    </div>                                                                         
+                    </div>
                 </div>
             </div>
         </div>
         <br>
     </div>
+
     <script>
         function deleteAlbum(id) {
             Swal.fire({
@@ -116,19 +124,18 @@
         }
     </script>
     <script>
-    @if (session('success'))
-        Swal.fire({
-            icon: 'success',
-            title: 'Success',
-            text: '{{ session('success') }}',
-        });
-    @elseif (session('error'))
-        Swal.fire({
-            icon: 'error',
-            title: 'Error',
-            text: '{{ session('error') }}',
-        });
-    @endif
-</script>
-
+        @if (session('success'))
+            Swal.fire({
+                icon: 'success',
+                title: 'Success',
+                text: '{{ session('success') }}',
+            });
+        @elseif (session('error'))
+            Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: '{{ session('error') }}',
+            });
+        @endif
+    </script>
 @endsection
