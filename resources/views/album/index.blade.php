@@ -19,6 +19,7 @@
                             </div>
                         </div>
                     </div>
+
                     <div class="card-body table-responsive">
                         <table class="table table-bordered table-hover align-middle text-nowrap">
                             <thead class="table-dark">
@@ -40,7 +41,7 @@
                                         <td>{{ $album->user->NamaLengkap }}</td>
                                         <td>{{ $album->created_at }}</td>
                                         <td>
-                                            <div class="d-flex flex-nowrap gap-2 overflow-auto">
+                                            <div class="d-flex flex-wrap gap-2">
                                                 <a href="{{ route('album.show', $album->id) }}" class="btn btn-success btn-sm">
                                                     <i class="fa-solid fa-eye"></i>
                                                 </a>
@@ -67,13 +68,12 @@
                             </tbody>
                         </table>
                     </div>
+
                     <div class="card-footer">
                         <nav aria-label="Page navigation">
                             <ul class="pagination justify-content-center flex-wrap">
                                 @if ($albums->onFirstPage())
-                                    <li class="page-item disabled">
-                                        <span class="page-link">&laquo;</span>
-                                    </li>
+                                    <li class="page-item disabled"><span class="page-link">&laquo;</span></li>
                                 @else
                                     <li class="page-item">
                                         <a class="page-link" href="{{ $albums->previousPageUrl() }}"
@@ -92,9 +92,7 @@
                                         <a class="page-link" href="{{ $albums->nextPageUrl() }}" aria-label="Next">&raquo;</a>
                                     </li>
                                 @else
-                                    <li class="page-item disabled">
-                                        <span class="page-link">&raquo;</span>
-                                    </li>
+                                    <li class="page-item disabled"><span class="page-link">&raquo;</span></li>
                                 @endif
                             </ul>
                         </nav>
@@ -123,6 +121,7 @@
             });
         }
     </script>
+
     <script>
         @if (session('success'))
             Swal.fire({

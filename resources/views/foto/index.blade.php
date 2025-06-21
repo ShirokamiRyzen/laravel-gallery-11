@@ -19,9 +19,11 @@
                             </div>
                         </div>
                     </div>
+
                     <div class="card-body table-responsive">
                         <label for="album_id" class="mb-2 fw-bold">Filter:</label>
-                        <select name="album_id" id="album_id" onchange="applyFilter()" class="form-select mb-3 w-auto">
+                        <select name="album_id" id="album_id" onchange="applyFilter()" class="form-select mb-3"
+                            style="max-width: 250px;">
                             <option value="">All Albums</option>
                             @foreach($albums as $album)
                                 <option value="{{ $album->id }}" {{ Request::get('album_id') == $album->id ? 'selected' : '' }}>
@@ -48,8 +50,8 @@
                                     <tr>
                                         <td>{{ ($fotos->currentPage() - 1) * $fotos->perPage() + $loop->iteration }}</td>
                                         <td>
-                                            <img src="{{ Storage::url($foto->LokasiFile) }}" alt="Foto" loading="lazy"
-                                                style="max-width: 100px; max-height: 100px;" class="img-fluid rounded">
+                                            <img src="{{ Storage::url($foto->LokasiFile) }}?quality=25" alt="Foto"
+                                                loading="lazy" width="100" height="75" class="rounded shadow-sm">
                                         </td>
                                         <td>{{ Str::limit($foto->JudulFoto, 40) }}</td>
                                         <td>{{ Str::limit($foto->DeskripsiFoto, 40) }}</td>
@@ -57,7 +59,7 @@
                                         <td>{{ $foto->user->NamaLengkap }}</td>
                                         <td>{{ $foto->created_at }}</td>
                                         <td>
-                                            <div class="d-flex flex-nowrap gap-2 overflow-auto">
+                                            <div class="d-flex flex-wrap gap-2">
                                                 <a href="{{ route('foto.edit', $foto->id) }}" class="btn btn-primary btn-sm">
                                                     <i class="fa-solid fa-pen-to-square"></i>
                                                 </a>
