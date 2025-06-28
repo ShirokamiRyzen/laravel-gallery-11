@@ -12,7 +12,7 @@
             <a href="https://github.com/ShirokamiRyzen" class="me-4 text-reset">
                 <i class="fa-brands fa-github"></i>
             </a>
-            <a href="https://www.instagram.com/ryzen_vermillion" class="me-4 text-reset">
+            <a href="https://www.instagram.com/fatih_frdaus" class="me-4 text-reset">
                 <i class="fa-brands fa-instagram"></i>
             </a>
             <a href="https://www.facebook.com/Nao.Tomori.UwU" class="text-reset">
@@ -32,7 +32,7 @@
                 <div class="col-md-3 col-lg-4 col-xl-3 mx-auto mb-4">
                     <!-- Content -->
                     <h6 class="text-uppercase fw-bold mb-4">
-                        <i class="fas fa-gem me-3"></i>Gallery App
+                        <img src="assets/custom/img/logo.png" width="28px" alt="Logo"> Gallery App
                     </h6>
                     <p>
                         Quickly design and customize responsive mobile-first sites with Bootstrap, the world's
@@ -53,9 +53,9 @@
                         </a>
                     </p>
                     <p>
-                        <a class="text-reset text-decoration-none" href="mailto:ryzen@ryzendesu.vip">
+                        <a class="text-reset text-decoration-none" href="mailto:fatihfirdaus404@gmail.com">
                             <i class="fa-solid fa-envelope me-3"></i>
-                            ryzen@ryzendesu.vip
+                            fatihfirdaus404@gmail.com
                         </a>
                     </p>
                     <p>
@@ -74,8 +74,8 @@
 
     <!-- Copyright -->
     <div class="text-center p-4" style="background-color: rgba(0, 0, 0, 0.05);">
-        © 2024 Copyright:
-        <a class="text-reset fw-bold" href="https://ryzendesu.vip/">Fatih Firdaus</a>
+        © 2025 Copyright
+        <a class="text-reset text-decoration-none fw-bold">Kelompok 1 - PWL</a>
     </div>
     <!-- Copyright -->
 </footer>
