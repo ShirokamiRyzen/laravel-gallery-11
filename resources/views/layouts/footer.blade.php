@@ -32,7 +32,7 @@
                 <div class="col-md-3 col-lg-4 col-xl-3 mx-auto mb-4">
                     <!-- Content -->
                     <h6 class="text-uppercase fw-bold mb-4">
-                        <img src="assets/custom/img/logo.png" width="28px" alt="Logo"> Gallery App
+                        <img src="{{ asset('assets/custom/img/logo.png') }}" width="28px" alt="Logo"> Gallery App
                     </h6>
                     <p>
                         Quickly design and customize responsive mobile-first sites with Bootstrap, the world's

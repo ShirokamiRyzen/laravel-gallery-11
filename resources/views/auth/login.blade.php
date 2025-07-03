@@ -265,7 +265,7 @@
     <div id="container">
         <div id="inviteContainer">
             <div class="logoContainer">
-                <img class="logo" src="assets/custom/img/logo.png"
+                <img class="logo" src="{{ asset('assets/custom/img/logo.png') }}"
                    width="150px" alt="Logo">
             </div>
             <div class="acceptContainer">

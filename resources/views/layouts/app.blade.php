@@ -110,7 +110,7 @@
 <body class="preload">
     <nav class="navbar navbar-expand-lg border-body sticky-top">
         <div class="container-fluid px-3 px-lg-5">
-            <a class="navbar-brand fw-bold" href="/"><img src="assets/custom/img/logo.png" width="28px" alt="Logo"> Gallery App</a>
+            <a class="navbar-brand fw-bold" href="/"><img src="{{ asset('assets/custom/img/logo.png') }}" width="28px" alt="Logo"> Gallery App</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
                 data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
                 aria-label="Toggle navigation">
