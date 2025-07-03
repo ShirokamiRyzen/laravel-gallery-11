@@ -57,22 +57,15 @@
                             <div class="col text-end">
                                 @guest
                                 @else
-                                    @if ($foto->isLikedByUser(auth()->id()))
-                                        <form action="{{ route('foto.unlike', $foto->id) }}" method="post">
-                                            @csrf
-                                            @method('DELETE')
-                                            <button class="btn btn-danger like-btn" data-foto-id="{{ $foto->id }}">
-                                                <i class="fa-solid fa-heart"></i>
-                                            </button>
-                                        </form>
-                                    @else
-                                        <form action="{{ route('foto.like', $foto->id) }}" method="post">
-                                            @csrf
-                                            <button class="btn btn-primary like-btn" data-foto-id="{{ $foto->id }}">
-                                                <i class="fa-regular fa-heart"></i>
-                                            </button>
-                                        </form>
-                                    @endif
+                                    <button
+                                        class="btn {{ $foto->isLikedByUser(auth()->id()) ? 'btn-danger' : 'btn-primary' }} like-btn"
+                                        data-foto-id="{{ $foto->id }}"
+                                        data-liked="{{ $foto->isLikedByUser(auth()->id()) ? 'true' : 'false' }}"
+                                        data-like-url="{{ route('foto.like', $foto->id) }}"
+                                        data-unlike-url="{{ route('foto.unlike', $foto->id) }}">
+                                        <i
+                                            class="{{ $foto->isLikedByUser(auth()->id()) ? 'fa-solid' : 'fa-regular' }} fa-heart"></i>
+                                    </button>
                                 @endguest
                                 <p id="total-likes"><i class="fa-solid fa-heart"></i> {{ $foto->total_likes }}</p>
                             </div>
@@ -174,5 +167,43 @@
                 text: '{{ session('error') }}',
             });
         @endif
+    </script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const likeBtn = document.querySelector('.like-btn');
+
+            if (likeBtn) {
+                likeBtn.addEventListener('click', function () {
+                    const fotoId = this.dataset.fotoId;
+                    const liked = this.dataset.liked === 'true';
+                    const likeUrl = this.dataset.likeUrl;
+                    const unlikeUrl = this.dataset.unlikeUrl;
+                    const url = liked ? unlikeUrl : likeUrl;
+                    const token = '{{ csrf_token() }}';
+                    const btn = this;
+
+                    fetch(url, {
+                        method: liked ? 'DELETE' : 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Accept': 'application/json',
+                            'X-CSRF-TOKEN': token,
+                        },
+                    })
+                        .then(response => response.json())
+                        .then(data => {
+                            btn.dataset.liked = (!liked).toString();
+                            btn.innerHTML = `<i class="${!liked ? 'fa-solid' : 'fa-regular'} fa-heart"></i>`;
+                            btn.classList.remove(liked ? 'btn-danger' : 'btn-primary');
+                            btn.classList.add(!liked ? 'btn-danger' : 'btn-primary');
+
+                            document.getElementById('total-likes').innerHTML = `<i class="fa-solid fa-heart"></i> ${data.total_likes}`;
+                        })
+                        .catch(error => {
+                            console.error('Like error:', error);
+                        });
+                });
+            }
+        });
     </script>
 @endsection
